@@ -1,0 +1,16 @@
+@model MovieDatabase.Models.Movie
+
+@{
+    ViewData["Title"] = "Movie Saved";
+}
+
+<div class="text-center">
+    <h1 class="display-5 mb-3">Movie Saved!</h1>
+    <p class="lead">Thanks for adding <strong>@Model.Title</strong> to the Joel Hilton Film Collection.</p>
+
+    <p class="mt-4">
+        <a asp-controller="Movies" asp-action="Add" class="btn btn-primary me-2">Add Another Movie</a>
+        <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Back to Home</a>
+    </p>
+</div>
+

@@ -1,0 +1,43 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+public class UserRequirements
+{
+    public string FirstName { get; set; }
+    public string LastName { get; set; }
+    public DateTime RegistrationDate { get; set; }
+}
+
+public class MartianTimeSystem
+{
+    // Parameterized to handle any planetary rotation period in seconds
+    // Earth day: 86,400s | Mars Sol: ~88,775s
+    public double SecondsPerPlanetaryDay { get; set; }
+    public double TimeZoneOffset { get; set; }
+
+    public double GetPlanetaryTimestamp(DateTime earthTime)
+    {
+        long unixSeconds = ((DateTimeOffset)earthTime).ToUnixTimeSeconds();
+        return (unixSeconds / SecondsPerPlanetaryDay) + TimeZoneOffset;
+    }
+}
+
+public class UserProcessor
+{
+    public static void ProcessUsers(List<UserRequirements> users, MartianTimeSystem planetConfig)
+    {
+        // Using PLINQ for "Tens of Thousands" of users - much faster than 'for each'
+        var processedUsers = users.AsParallel()
+            .Where(u => !string.IsNullOrWhiteSpace(u.FirstName) && !string.IsNullOrWhiteSpace(u.LastName))
+            .Select(u => new
+            {
+                FullName = $"{u.FirstName} {u.LastName}",
+                LocalTimestamp = planetConfig.GetPlanetaryTimestamp(u.RegistrationDate)
+            })
+            .ToList();
+
+        Console.WriteLine($"Successfully processed {processedUsers.Count} users across cores.");
+    }
+}

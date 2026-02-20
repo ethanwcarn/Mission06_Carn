@@ -20,7 +20,6 @@ namespace MovieDatabase.Models
         public string Director { get; set; } = string.Empty;
 
         [Required]
-        [RegularExpression("^(G|PG|PG-13|R)$", ErrorMessage = "Rating must be G, PG, PG-13, or R.")]
         public string Rating { get; set; } = string.Empty;
 
         // Optional fields

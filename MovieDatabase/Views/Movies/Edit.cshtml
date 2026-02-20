@@ -4,9 +4,10 @@
     ViewData["Title"] = "Edit Movie";
 }
 
-<h1 class="mb-4">Edit Movie</h1>
+<div class="page-card">
+    <h1 class="mb-4">Edit Movie</h1>
 
-<form asp-action="Edit" method="post" class="needs-validation" novalidate>
+    <form asp-action="Edit" method="post" class="needs-validation" novalidate>
     <input asp-for="Id" type="hidden" />
 
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -72,6 +73,7 @@
     <button type="submit" class="btn btn-primary me-2">Save Changes</button>
     <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
 </form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

@@ -6,46 +6,56 @@ using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Register MVC services (controllers + views)
 builder.Services.AddControllersWithViews();
 
-// Configure EF Core with SQLite
+// Configure Entity Framework Core to use SQLite with the connection string from appsettings.json
 builder.Services.AddDbContext<MovieContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("MovieConnection")));
 
+// Set explicit Kestrel ports for HTTPS and HTTP
 builder.WebHost.ConfigureKestrel(options =>
 {
     options.ListenLocalhost(7297, listenOptions => listenOptions.UseHttps());
-    options.ListenLocalhost(5298); // use different HTTP port
+    options.ListenLocalhost(5298);
 });
+
 var app = builder.Build();
 
-// One-time import from Joel Hilton CSV when database has few movies (e.g. legacy seed).
+// One-time CSV import: loads the Joel Hilton Movie Collection from a CSV file
+// into the database on first run (or when the DB has fewer rows than the CSV).
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<MovieContext>();
     var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
     var csvPath = Path.Combine(env.ContentRootPath, "Data", "JoelHiltonMovieCollection.csv");
 
-    // Import CSV when the collection is smaller than the full list (so first run or after manual adds).
+    // Only import if the CSV exists and the database isn't already fully loaded
     if (File.Exists(csvPath) && context.Movies.Count() < 420)
     {
+        // Clear existing movies to avoid duplicates
         context.Movies.RemoveRange(context.Movies.ToList());
         context.SaveChanges();
 
+        // Build a dictionary mapping category name -> CategoryId for fast lookup during import
+        var categoryLookup = context.Categories
+            .ToDictionary(c => c.Name, c => c.CategoryId, StringComparer.OrdinalIgnoreCase);
+
+        // Configure CsvHelper to be lenient with missing/extra fields
         var config = new CsvConfiguration(CultureInfo.InvariantCulture)
         {
             HasHeaderRecord = true,
             MissingFieldFound = null,
             HeaderValidated = null
         };
+
         using var reader = new StreamReader(csvPath);
         using var csv = new CsvReader(reader, config);
         var rows = csv.GetRecords<MovieCsvRow>().ToList();
 
         foreach (var row in rows)
         {
-            // Parse year: use first four-digit year if range (e.g. "2001-2002" -> 2001).
+            // Parse year: extract the first four-digit year from ranges like "2001-2002"
             var yearStr = row.Year?.Trim() ?? "";
             int year = 1888;
             if (yearStr.Length >= 4)
@@ -58,10 +68,16 @@ using (var scope = app.Services.CreateScope())
             var edited = string.Equals(row.Edited, "Yes", StringComparison.OrdinalIgnoreCase) ? (bool?)true : null;
             var notes = row.Notes != null && row.Notes.Length > 25 ? row.Notes[..25] : row.Notes;
 
+            // Look up the CategoryId from the seeded categories; default to "Miscellaneous" if not found
+            var categoryName = row.Category?.Trim() ?? "Miscellaneous";
+            int categoryId = categoryLookup.ContainsKey(categoryName)
+                ? categoryLookup[categoryName]
+                : categoryLookup["Miscellaneous"];
+
             context.Movies.Add(new Movie
             {
                 Id = row.Id,
-                Category = row.Category?.Trim() ?? "",
+                CategoryId = categoryId,
                 Title = row.Title?.Trim() ?? "",
                 Year = year,
                 Director = row.Director?.Trim() ?? "",
@@ -71,25 +87,24 @@ using (var scope = app.Services.CreateScope())
                 Notes = string.IsNullOrWhiteSpace(notes) ? null : notes
             });
         }
+
         context.SaveChanges();
     }
 }
 
-// Configure the HTTP request pipeline.
+// Configure the HTTP request pipeline
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseRouting();
-
 app.UseAuthorization();
-
 app.MapStaticAssets();
 
+// Default route: {controller=Home}/{action=Index}/{id?}
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}")

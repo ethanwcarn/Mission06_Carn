@@ -4,14 +4,17 @@
     ViewData["Title"] = "Movie Collection";
 }
 
+<!-- Main movie listing page showing every movie in the database -->
 <div class="card page-card border-0">
     <div class="card-body p-4">
         <h1 class="mb-4">Joel Hilton Movie Collection</h1>
 
+        <!-- Link to the Add Movie form -->
         <p>
             <a asp-action="Add" class="btn btn-primary">Add New Movie</a>
         </p>
 
+        <!-- Responsive table listing all movies with Edit/Delete actions -->
         <div class="table-responsive">
             <table class="table table-striped table-hover table-bordered">
                 <thead class="table-dark">
@@ -28,11 +31,13 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @* Loop through each movie and display its details in a row *@
                     @foreach (var movie in Model)
                     {
                         <tr>
                             <td>@movie.Title</td>
-                            <td>@movie.Category</td>
+                            <!-- Display the related Category name via the navigation property -->
+                            <td>@movie.Category?.Name</td>
                             <td>@movie.Year</td>
                             <td>@movie.Director</td>
                             <td>@movie.Rating</td>
@@ -40,6 +45,7 @@
                             <td>@movie.LentTo</td>
                             <td>@movie.Notes</td>
                             <td class="text-nowrap">
+                                <!-- Edit and Delete action links for each movie -->
                                 <a asp-action="Edit" asp-route-id="@movie.Id" class="btn btn-sm btn-outline-secondary me-1">Edit</a>
                                 <a asp-action="Delete" asp-route-id="@movie.Id" class="btn btn-sm btn-outline-danger">Delete</a>
                             </td>

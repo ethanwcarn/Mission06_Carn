@@ -4,36 +4,48 @@
     ViewData["Title"] = "Add Movie";
 }
 
+<!-- Add Movie form: lets the user enter all details for a new movie -->
 <div class="page-card">
     <h1 class="mb-4">Add a Movie to the Collection</h1>
 
     <form asp-action="Add" method="post" class="needs-validation" novalidate>
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+    <!-- Category dropdown — populated from the Categories table via ViewBag -->
     <div class="mb-3">
-        <label asp-for="Category" class="form-label"></label>
-        <input asp-for="Category" class="form-control" />
-        <span asp-validation-for="Category" class="text-danger"></span>
+        <label asp-for="CategoryId" class="form-label">Category</label>
+        <select asp-for="CategoryId" class="form-select">
+            <option value="">-- Select Category --</option>
+            @foreach (var cat in (IEnumerable<MovieDatabase.Models.Category>)ViewBag.Categories)
+            {
+                <option value="@cat.CategoryId">@cat.Name</option>
+            }
+        </select>
+        <span asp-validation-for="CategoryId" class="text-danger"></span>
     </div>
 
+    <!-- Movie title -->
     <div class="mb-3">
         <label asp-for="Title" class="form-label"></label>
         <input asp-for="Title" class="form-control" />
         <span asp-validation-for="Title" class="text-danger"></span>
     </div>
 
+    <!-- Release year -->
     <div class="mb-3">
         <label asp-for="Year" class="form-label"></label>
         <input asp-for="Year" class="form-control" />
         <span asp-validation-for="Year" class="text-danger"></span>
     </div>
 
+    <!-- Director name -->
     <div class="mb-3">
         <label asp-for="Director" class="form-label"></label>
         <input asp-for="Director" class="form-control" />
         <span asp-validation-for="Director" class="text-danger"></span>
     </div>
 
+    <!-- MPAA rating dropdown -->
     <div class="mb-3">
         <label asp-for="Rating" class="form-label"></label>
         <select asp-for="Rating" class="form-select">
@@ -46,6 +58,7 @@
         <span asp-validation-for="Rating" class="text-danger"></span>
     </div>
 
+    <!-- Whether the movie has been edited for content -->
     <div class="mb-3">
         <label asp-for="Edited" class="form-label">Edited</label>
         <select asp-for="Edited" class="form-select">
@@ -56,12 +69,14 @@
         <span asp-validation-for="Edited" class="text-danger"></span>
     </div>
 
+    <!-- Optional: who the movie is lent to -->
     <div class="mb-3">
         <label asp-for="LentTo" class="form-label"></label>
         <input asp-for="LentTo" class="form-control" />
         <span asp-validation-for="LentTo" class="text-danger"></span>
     </div>
 
+    <!-- Optional short notes (max 25 chars) -->
     <div class="mb-3">
         <label asp-for="Notes" class="form-label"></label>
         <input asp-for="Notes" class="form-control" maxlength="25" />

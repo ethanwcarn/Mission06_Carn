@@ -13,12 +13,25 @@ namespace MovieDatabase.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Categories",
+                columns: table => new
+                {
+                    CategoryId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Categories", x => x.CategoryId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Movies",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Category = table.Column<string>(type: "TEXT", nullable: false),
+                    CategoryId = table.Column<int>(type: "INTEGER", nullable: false),
                     Title = table.Column<string>(type: "TEXT", nullable: false),
                     Year = table.Column<int>(type: "INTEGER", nullable: false),
                     Director = table.Column<string>(type: "TEXT", nullable: false),
@@ -30,17 +43,33 @@ namespace MovieDatabase.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Movies", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Movies_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "CategoryId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
-                table: "Movies",
-                columns: new[] { "Id", "Category", "Director", "Edited", "LentTo", "Notes", "Rating", "Title", "Year" },
+                table: "Categories",
+                columns: new[] { "CategoryId", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Comedy", "Edgar Wright", true, null, "One of Joel's faves", "R", "Hot Fuzz", 2007 },
-                    { 2, "Action/Adventure", "Christopher Nolan", null, null, "Mind-bending classic", "PG-13", "Inception", 2010 },
-                    { 3, "Comedy", "Harold Ramis", null, null, "Endless rewatch", "PG", "Groundhog Day", 1993 }
+                    { 1, "Action/Adventure" },
+                    { 2, "Comedy" },
+                    { 3, "Drama" },
+                    { 4, "Family" },
+                    { 5, "Horror/Suspense" },
+                    { 6, "Miscellaneous" },
+                    { 7, "Television" },
+                    { 8, "VHS" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Movies_CategoryId",
+                table: "Movies",
+                column: "CategoryId");
         }
 
         /// <inheritdoc />
@@ -48,6 +77,9 @@ namespace MovieDatabase.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Movies");
+
+            migrationBuilder.DropTable(
+                name: "Categories");
         }
     }
 }

@@ -1,38 +1,53 @@
+@*
+    Movies/Add.cshtml - Form view for adding a new movie to Joel's collection.
+    Uses Tag Helpers to bind form fields to the Movie model properties.
+    Includes client-side and server-side validation.
+    Rating uses a dropdown select; Edited is a boolean dropdown (Yes/No).
+*@
+
 @model MovieDatabase.Models.Movie
 
 @{
     ViewData["Title"] = "Add Movie";
 }
 
+@* Page heading *@
 <h1 class="mb-4">Add a Movie to the Collection</h1>
 
+@* Form posts to the MoviesController.Add POST action; includes CSRF protection *@
 <form asp-action="Add" method="post" class="needs-validation" novalidate>
+    @* Displays model-level validation errors (not tied to a specific field) *@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+    @* Category input field - genre of the movie *@
     <div class="mb-3">
         <label asp-for="Category" class="form-label"></label>
         <input asp-for="Category" class="form-control" />
         <span asp-validation-for="Category" class="text-danger"></span>
     </div>
 
+    @* Title input field - name of the movie *@
     <div class="mb-3">
         <label asp-for="Title" class="form-label"></label>
         <input asp-for="Title" class="form-control" />
         <span asp-validation-for="Title" class="text-danger"></span>
     </div>
 
+    @* Year input field - release year with range validation (1888-2100) *@
     <div class="mb-3">
         <label asp-for="Year" class="form-label"></label>
         <input asp-for="Year" class="form-control" />
         <span asp-validation-for="Year" class="text-danger"></span>
     </div>
 
+    @* Director input field *@
     <div class="mb-3">
         <label asp-for="Director" class="form-label"></label>
         <input asp-for="Director" class="form-control" />
         <span asp-validation-for="Director" class="text-danger"></span>
     </div>
 
+    @* Rating dropdown - restricted to MPAA ratings (G, PG, PG-13, R) *@
     <div class="mb-3">
         <label asp-for="Rating" class="form-label"></label>
         <select asp-for="Rating" class="form-select">
@@ -45,6 +60,7 @@
         <span asp-validation-for="Rating" class="text-danger"></span>
     </div>
 
+    @* Edited dropdown - boolean field indicating if the movie has been edited for content *@
     <div class="mb-3">
         <label asp-for="Edited" class="form-label">Edited</label>
         <select asp-for="Edited" class="form-select">
@@ -55,22 +71,25 @@
         <span asp-validation-for="Edited" class="text-danger"></span>
     </div>
 
+    @* LentTo input field - optional, who the movie is currently lent to *@
     <div class="mb-3">
         <label asp-for="LentTo" class="form-label"></label>
         <input asp-for="LentTo" class="form-control" />
         <span asp-validation-for="LentTo" class="text-danger"></span>
     </div>
 
+    @* Notes input field - optional short notes, max 25 characters *@
     <div class="mb-3">
         <label asp-for="Notes" class="form-label"></label>
         <input asp-for="Notes" class="form-control" maxlength="25" />
         <span asp-validation-for="Notes" class="text-danger"></span>
     </div>
 
+    @* Submit button to save the movie to the database *@
     <button type="submit" class="btn btn-primary">Save Movie</button>
 </form>
 
+@* Load client-side validation scripts (jQuery Validation) for real-time form feedback *@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-

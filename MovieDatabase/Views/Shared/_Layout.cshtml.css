@@ -1,28 +1,34 @@
-﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
+/* _Layout.cshtml.css - Scoped CSS styles for the shared layout template.
+   These styles apply specifically to elements within _Layout.cshtml,
+   customizing the navbar brand, links, buttons, borders, and footer. */
 
+/* Allow the navbar brand text to wrap on small screens */
 a.navbar-brand {
   white-space: normal;
   text-align: center;
   word-break: break-all;
 }
 
+/* Default link color throughout the site */
 a {
   color: #0077cc;
 }
 
+/* Custom primary button color scheme (overrides Bootstrap default blue) */
 .btn-primary {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
 
+/* Active state for nav pill links - matches the custom primary color */
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
   color: #fff;
   background-color: #1b6ec2;
   border-color: #1861ac;
 }
 
+/* Light gray border styles for visual separation of sections */
 .border-top {
   border-top: 1px solid #e5e5e5;
 }
@@ -30,15 +36,18 @@ a {
   border-bottom: 1px solid #e5e5e5;
 }
 
+/* Subtle box shadow for elevated card/navbar appearance */
 .box-shadow {
   box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
+/* Style for cookie consent accept button */
 button.accept-policy {
   font-size: 1rem;
   line-height: inherit;
 }
 
+/* Sticky footer - pinned to the bottom of the viewport */
 .footer {
   position: absolute;
   bottom: 0;

@@ -1,40 +1,56 @@
+@*
+    Movies/Edit.cshtml - Form view for editing an existing movie in the collection.
+    Pre-populates all form fields with the current movie data.
+    Uses the same form structure as Add.cshtml but posts to the Edit action.
+    Includes a hidden Id field to identify which movie is being updated.
+*@
+
 @model MovieDatabase.Models.Movie
 
 @{
     ViewData["Title"] = "Edit Movie";
 }
 
+@* Page heading *@
 <h1 class="mb-4">Edit Movie</h1>
 
+@* Form posts to the MoviesController.Edit POST action; includes CSRF protection *@
 <form asp-action="Edit" method="post" class="needs-validation" novalidate>
+    @* Hidden field to preserve the movie's Id during form submission *@
     <input asp-for="Id" type="hidden" />
 
+    @* Displays model-level validation errors *@
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
+    @* Category input field - pre-filled with the current category *@
     <div class="mb-3">
         <label asp-for="Category" class="form-label"></label>
         <input asp-for="Category" class="form-control" />
         <span asp-validation-for="Category" class="text-danger"></span>
     </div>
 
+    @* Title input field - pre-filled with the current title *@
     <div class="mb-3">
         <label asp-for="Title" class="form-label"></label>
         <input asp-for="Title" class="form-control" />
         <span asp-validation-for="Title" class="text-danger"></span>
     </div>
 
+    @* Year input field - pre-filled with the current year *@
     <div class="mb-3">
         <label asp-for="Year" class="form-label"></label>
         <input asp-for="Year" class="form-control" />
         <span asp-validation-for="Year" class="text-danger"></span>
     </div>
 
+    @* Director input field - pre-filled with the current director *@
     <div class="mb-3">
         <label asp-for="Director" class="form-label"></label>
         <input asp-for="Director" class="form-control" />
         <span asp-validation-for="Director" class="text-danger"></span>
     </div>
 
+    @* Rating dropdown - pre-selects the current rating value *@
     <div class="mb-3">
         <label asp-for="Rating" class="form-label"></label>
         <select asp-for="Rating" class="form-select">
@@ -47,6 +63,7 @@
         <span asp-validation-for="Rating" class="text-danger"></span>
     </div>
 
+    @* Edited dropdown - pre-selects the current boolean value *@
     <div class="mb-3">
         <label asp-for="Edited" class="form-label">Edited</label>
         <select asp-for="Edited" class="form-select">
@@ -57,23 +74,26 @@
         <span asp-validation-for="Edited" class="text-danger"></span>
     </div>
 
+    @* LentTo input field - pre-filled with who the movie is lent to *@
     <div class="mb-3">
         <label asp-for="LentTo" class="form-label"></label>
         <input asp-for="LentTo" class="form-control" />
         <span asp-validation-for="LentTo" class="text-danger"></span>
     </div>
 
+    @* Notes input field - pre-filled with current notes, max 25 characters *@
     <div class="mb-3">
         <label asp-for="Notes" class="form-label"></label>
         <input asp-for="Notes" class="form-control" maxlength="25" />
         <span asp-validation-for="Notes" class="text-danger"></span>
     </div>
 
+    @* Save button submits changes; Cancel returns to the movie list without saving *@
     <button type="submit" class="btn btn-primary me-2">Save Changes</button>
     <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
 </form>
 
+@* Load client-side validation scripts for real-time form feedback *@
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }
-

@@ -1,9 +1,18 @@
+@*
+    Home/Index.cshtml - The Home page of the Joel Hilton Film Collection.
+    Displays the site heading and an image of Joel Hilton.
+    This is the default landing page for the application.
+*@
+
 @{
     ViewData["Title"] = "Home";
 }
 
+@* Centered container for the heading and hero image *@
 <div class="text-center">
+    @* Main heading displayed prominently on the home page *@
     <h1 class="display-4">The Joel Hilton Film Collection</h1>
+    @* Image of Joel Hilton loaded from an external URL; scales responsively *@
     <img src="https://byu.box.com/shared/static/8sjz2qei13h4nnlw0e6gc10ot35octkf.jpg"
          alt="Joel Hilton"
          class="img-fluid mt-4" />

@@ -1,16 +1,26 @@
+@*
+    Movies/Index.cshtml - Displays all movies in Joel's collection in a table.
+    Receives a list of Movie objects from the MoviesController.Index action.
+    Each row shows movie details and provides Edit and Delete action buttons.
+*@
+
 @model IEnumerable<MovieDatabase.Models.Movie>
 
 @{
     ViewData["Title"] = "Movie Collection";
 }
 
+@* Page heading *@
 <h1 class="mb-4">Joel Hilton Movie Collection</h1>
 
+@* Button to navigate to the Add Movie form *@
 <p>
     <a asp-action="Add" class="btn btn-primary">Add New Movie</a>
 </p>
 
+@* Table displaying all movies from the database, sorted by title *@
 <table class="table table-striped table-hover">
+    @* Table header row with column names *@
     <thead class="table-dark">
         <tr>
             <th>Title</th>
@@ -25,6 +35,7 @@
         </tr>
     </thead>
     <tbody>
+        @* Loop through each movie and render a table row with its data *@
         @foreach (var movie in Model)
         {
             <tr>
@@ -33,9 +44,11 @@
                 <td>@movie.Year</td>
                 <td>@movie.Director</td>
                 <td>@movie.Rating</td>
+                @* Display Edited as Yes/No/blank depending on the nullable boolean value *@
                 <td>@(movie.Edited.HasValue ? (movie.Edited.Value ? "Yes" : "No") : "")</td>
                 <td>@movie.LentTo</td>
                 <td>@movie.Notes</td>
+                @* Action buttons for editing or deleting this specific movie *@
                 <td class="text-nowrap">
                     <a asp-action="Edit" asp-route-id="@movie.Id" class="btn btn-sm btn-outline-secondary me-1">Edit</a>
                     <a asp-action="Delete" asp-route-id="@movie.Id" class="btn btn-sm btn-outline-danger">Delete</a>
@@ -44,4 +57,3 @@
         }
     </tbody>
 </table>
-

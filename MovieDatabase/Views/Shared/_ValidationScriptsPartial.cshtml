@@ -1,2 +1,10 @@
-﻿<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+@*
+    _ValidationScriptsPartial.cshtml - Partial view that loads jQuery Validation scripts.
+    Included in form views (Add, Edit) via the Scripts section to enable
+    client-side form validation before the form is submitted to the server.
+*@
+
+@* jQuery Validation plugin - provides client-side validation rules *@
+<script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+@* jQuery Unobtrusive Validation - integrates data-val-* attributes from Tag Helpers with jQuery Validate *@
 <script src="~/lib/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.min.js"></script>

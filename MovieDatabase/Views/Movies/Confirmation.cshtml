@@ -1,3 +1,9 @@
+@*
+    Movies/Confirmation.cshtml - Success page displayed after a new movie is saved.
+    Shows the title of the movie that was just added and provides navigation
+    buttons to add another movie or return to the home page.
+*@
+
 @model MovieDatabase.Models.Movie
 
 @{
@@ -5,12 +11,14 @@
 }
 
 <div class="text-center">
+    @* Success heading *@
     <h1 class="display-5 mb-3">Movie Saved!</h1>
+    @* Confirmation message showing the title of the saved movie *@
     <p class="lead">Thanks for adding <strong>@Model.Title</strong> to the Joel Hilton Film Collection.</p>
 
+    @* Navigation buttons to continue adding movies or go back to the home page *@
     <p class="mt-4">
         <a asp-controller="Movies" asp-action="Add" class="btn btn-primary me-2">Add Another Movie</a>
         <a asp-controller="Home" asp-action="Index" class="btn btn-outline-secondary">Back to Home</a>
     </p>
 </div>
-

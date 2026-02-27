@@ -1,4 +1,4 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
-
-// Write your JavaScript code.
+// site.js - Custom JavaScript for the Joel Hilton Movie Database application.
+// This file is loaded on every page via _Layout.cshtml.
+// Add any site-wide client-side behavior or interactivity here.
+// Currently no custom JS is needed; Bootstrap and jQuery handle UI interactions.
